@@ -9,5 +9,5 @@ class History(Base):
     dish_id = Column(Integer, ForeignKey("dish.id"), nullable=False)
     selected_by = Column(Integer, ForeignKey("user.id"), nullable=True)
     selected_method = Column(String(20), nullable=False)
-    comment = Column(String, nullable=True)
+    comment = Column(String(255), nullable=True)
     created_at = Column(DateTime, server_default=func.now())

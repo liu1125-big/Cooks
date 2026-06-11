@@ -5,6 +5,7 @@ from app.models.user import User
 from app.models.category import Category
 from app.models.dish import Dish
 from app.models.history import History
+from app.services.auth import get_password_hash
 
 
 def init_db():
@@ -16,8 +17,24 @@ def init_db():
             return
 
         users = [
-            User(username="john", nickname="John Doe", avatar="https://example.com/avatar1.jpg"),
-            User(username="jane", nickname="Jane Smith", avatar="https://example.com/avatar2.jpg"),
+            User(
+                username="admin", 
+                password_hash=get_password_hash("admin123"), 
+                nickname="管理员", 
+                role="admin"
+            ),
+            User(
+                username="user1", 
+                password_hash=get_password_hash("user123"), 
+                nickname="用户一", 
+                role="user"
+            ),
+            User(
+                username="user2", 
+                password_hash=get_password_hash("user123"), 
+                nickname="用户二", 
+                role="user"
+            ),
         ]
         db.add_all(users)
         db.commit()
@@ -53,9 +70,9 @@ def init_db():
         db.commit()
 
         histories = [
-            History(dish_id=1, selected_by=1, selected_method="random", comment="今晚吃这个"),
-            History(dish_id=5, selected_by=1, selected_method="manual", comment="简单快手"),
-            History(dish_id=7, selected_by=2, selected_method="recommend", comment="看起来不错"),
+            History(dish_id=1, selected_by=2, selected_method="random", comment="今晚吃这个"),
+            History(dish_id=5, selected_by=2, selected_method="manual", comment="简单快手"),
+            History(dish_id=7, selected_by=3, selected_method="recommend", comment="看起来不错"),
         ]
         db.add_all(histories)
         db.commit()
