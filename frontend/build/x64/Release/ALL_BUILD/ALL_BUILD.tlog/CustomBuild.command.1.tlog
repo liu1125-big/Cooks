@@ -1,0 +1,10 @@
+^D:\ZPT\COOKS\FRONTEND\CMAKELISTS.TXT
+setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/zpt/cooks/frontend -BD:/zpt/cooks/frontend/build --check-stamp-file D:/zpt/cooks/frontend/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

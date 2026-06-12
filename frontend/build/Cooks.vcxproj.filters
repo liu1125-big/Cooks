@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\zpt\cooks\frontend\build\Cooks_autogen\mocs_compilation_Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\zpt\cooks\frontend\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\zpt\cooks\frontend\build\.rcc\qrc_resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\zpt\cooks\frontend\build\Cooks_autogen\mocs_compilation_Release.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\zpt\cooks\frontend\build\Cooks_autogen\mocs_compilation_MinSizeRel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\zpt\cooks\frontend\build\Cooks_autogen\mocs_compilation_RelWithDebInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\Main.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\LoginPage.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\HomePage.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\DishesPage.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\CategoriesPage.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\HistoryPage.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\AddDishPopup.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\AddCategoryPopup.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\ApiService.qml" />
+    <ClInclude Include="D:\zpt\cooks\frontend\qml\ModalBlur.qml" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\zpt\cooks\frontend\build\CMakeFiles\18e85716c0c8d9621a344da6d824a02d\qrc_resources.cpp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\zpt\cooks\frontend\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{B8F2CBDE-4A92-34AC-9EDB-C68FB36D0378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D1874EB0-8083-3092-89D9-0BA495E9427A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

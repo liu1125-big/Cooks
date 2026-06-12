@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/zpt/cooks/frontend/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

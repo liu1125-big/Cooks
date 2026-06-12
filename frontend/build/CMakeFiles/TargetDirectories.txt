@@ -1,0 +1,4 @@
+D:/zpt/cooks/frontend/build/CMakeFiles/Cooks.dir
+D:/zpt/cooks/frontend/build/CMakeFiles/Cooks_qmlimportscan.dir
+D:/zpt/cooks/frontend/build/CMakeFiles/ALL_BUILD.dir
+D:/zpt/cooks/frontend/build/CMakeFiles/ZERO_CHECK.dir

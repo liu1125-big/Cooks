@@ -1,0 +1,20 @@
+^D:\ZPT\COOKS\FRONTEND\BUILD\CMAKEFILES\18E85716C0C8D9621A344DA6D824A02D\QRC_RESOURCES.CPP.RULE
+setlocal
+D:\Apps\Qt\6.6.3\msvc2019_64\.\bin\rcc.exe --output D:/zpt/cooks/frontend/build/.rcc/qrc_resources.cpp --name resources D:/zpt/cooks/frontend/build/.rcc/resources.qrc --no-zstd
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\ZPT\COOKS\FRONTEND\CMAKELISTS.TXT
+setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/zpt/cooks/frontend -BD:/zpt/cooks/frontend/build --check-stamp-file D:/zpt/cooks/frontend/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

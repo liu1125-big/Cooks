@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\zpt\cooks\frontend\build\CMakeFiles\266d9ccabfcfca92e6a058914fc53f5a\Qt6_QmlPlugins_Imports_Cooks.cmake.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\zpt\cooks\frontend\build\CMakeFiles\607c6dcc578f0e80e79302fd3ca7d8fd\Cooks_qmlimportscan.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\zpt\cooks\frontend\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\zpt\cooks\frontend\build\CMakeFiles\Cooks_qmlimportscan" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{B8F2CBDE-4A92-34AC-9EDB-C68FB36D0378}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
