@@ -6,7 +6,6 @@ from app.database.session import get_db
 from app.models.user import User
 from app.models.dish import Dish
 from app.models.category import Category
-from app.models.history import History
 from app.schemas.dish import DishCreate, DishUpdate, DishResponse
 from app.services.auth import get_current_user, require_admin
 
@@ -30,14 +29,19 @@ def create_dish(
         raise HTTPException(status_code=400, detail="菜品名称已存在")
     
     try:
-        db_dish = Dish(**dish.model_dump())
+        dish_data = dish.model_dump(exclude={"created_by"})
+        dish_data["created_by"] = current_user.id
+        db_dish = Dish(**dish_data)
         db.add(db_dish)
         db.commit()
         db.refresh(db_dish)
         return db_dish
-    except IntegrityError:
+    except IntegrityError as e:
         db.rollback()
-        raise HTTPException(status_code=400, detail="菜品名称已存在")
+        error_msg = str(e.orig) if e.orig else str(e)
+        if "duplicate" in error_msg.lower() or "unique" in error_msg.lower():
+            raise HTTPException(status_code=400, detail="菜品名称已存在")
+        raise HTTPException(status_code=400, detail=f"数据完整性错误: {error_msg}")
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"创建菜品失败: {str(e)}")
@@ -115,9 +119,12 @@ def update_dish(
         db.commit()
         db.refresh(db_dish)
         return db_dish
-    except IntegrityError:
+    except IntegrityError as e:
         db.rollback()
-        raise HTTPException(status_code=400, detail="菜品名称已存在")
+        error_msg = str(e.orig) if e.orig else str(e)
+        if "duplicate" in error_msg.lower() or "unique" in error_msg.lower():
+            raise HTTPException(status_code=400, detail="菜品名称已存在")
+        raise HTTPException(status_code=400, detail=f"更新菜品失败: {error_msg}")
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"更新菜品失败: {str(e)}")
@@ -133,13 +140,6 @@ def delete_dish(
     db_dish = db.query(Dish).filter(Dish.id == dish_id).first()
     if not db_dish:
         raise HTTPException(status_code=404, detail="菜品不存在")
-    
-    related_history = db.query(History).filter(History.dish_id == dish_id).count()
-    if related_history > 0:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"该菜品有 {related_history} 条历史记录，无法删除"
-        )
     
     try:
         db.delete(db_dish)

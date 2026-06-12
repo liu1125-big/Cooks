@@ -4,7 +4,8 @@ from app.database.session import engine, SessionLocal
 from app.models.user import User
 from app.models.category import Category
 from app.models.dish import Dish
-from app.models.history import History
+from app.models.cart import Cart
+from app.models.favorite import Favorite
 from app.services.auth import get_password_hash
 
 
@@ -67,14 +68,6 @@ def init_db():
             Dish(category_id=5, name="冰激凌", difficulty=2, enabled=True, remark="消暑圣品", created_by=2),
         ]
         db.add_all(dishes)
-        db.commit()
-
-        histories = [
-            History(dish_id=1, selected_by=2, selected_method="random", comment="今晚吃这个"),
-            History(dish_id=5, selected_by=2, selected_method="manual", comment="简单快手"),
-            History(dish_id=7, selected_by=3, selected_method="recommend", comment="看起来不错"),
-        ]
-        db.add_all(histories)
         db.commit()
 
     finally:

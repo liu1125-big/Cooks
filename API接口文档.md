@@ -16,8 +16,24 @@
 2. [用户管理](#2-用户管理-users)
 3. [分类管理](#3-分类管理-categories)
 4. [菜品管理](#4-菜品管理-dishes)
-5. [历史记录](#5-历史记录-history)
-6. [智能推荐](#6-智能推荐-recommend)
+5. [购物车](#5-购物车-cart)
+6. [收藏](#6-收藏-favorites)
+7. [智能推荐](#7-智能推荐-recommend)
+
+---
+
+**接口总览** (8个模块，31个接口)
+
+| 模块 | 接口数 | 说明 |
+|------|--------|------|
+| 健康检查 | 2 | 服务状态检查 |
+| 用户管理 | 6 | 注册、登录、CRUD操作 |
+| 分类管理 | 5 | 菜品分类管理 |
+| 菜品管理 | 6 | 菜品CRUD、收藏 |
+| 历史记录 | 5 | 选择历史记录管理 |
+| 购物车 | 5 | 购物车管理 |
+| 收藏 | 4 | 收藏管理 |
+| 智能推荐 | 1 | 随机推荐菜品 |
 
 ---
 
@@ -660,15 +676,15 @@ POST /dishes/{dish_id}/favorite
 
 ---
 
-## 5. 历史记录 (History)
+## 5. 购物车 (Cart)
 
-### 5.1 创建历史记录
+### 5.1 添加到购物车
 
 ```
-POST /history
+POST /cart
 ```
 
-**说明**: 记录菜品选择历史（需登录）
+**说明**: 将菜品添加到购物车（需登录）
 
 **请求头**: `Authorization: Bearer <token>`
 
@@ -676,9 +692,7 @@ POST /history
 ```json
 {
   "dish_id": 1,              // 菜品ID（必填）
-  "selected_by": 1,          // 选择人ID（可选，默认当前登录用户）
-  "selected_method": "random" | "manual",  // 选择方式（必填）
-  "comment": "string"       // 备注（可选）
+  "quantity": 1              // 数量（默认 1）
 }
 ```
 
@@ -686,56 +700,190 @@ POST /history
 ```json
 {
   "id": 1,
+  "user_id": 1,
   "dish_id": 1,
-  "selected_by": 1,
-  "selected_method": "random",
-  "comment": "今天想吃点辣",
-  "created_at": "2024-01-01T00:00:00"
+  "quantity": 2,
+  "dish_name": "宫保鸡丁",
+  "created_at": "2024-01-01T00:00:00",
+  "updated_at": "2024-01-01T00:00:00"
 }
 ```
 
+**说明**: 如果菜品已在购物车中，则累加数量
+
 **错误响应**:
 ```json
-// 400: 指定的菜品不存在
-{"detail": "指定的菜品不存在"}
+// 404: 菜品不存在
+{"detail": "菜品不存在"}
 ```
 
 ---
 
-### 5.2 获取历史记录
+### 5.2 获取购物车列表
 
 ```
-GET /history
+GET /cart
 ```
 
-**说明**: 获取历史记录列表（需登录）
+**说明**: 获取当前用户的购物车列表（需登录）
 
 **请求头**: `Authorization: Bearer <token>`
-
-**查询参数**:
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| start_date | datetime | 开始时间（可选，ISO格式） |
-| end_date | datetime | 结束时间（可选，ISO格式） |
-| dish_id | int | 按菜品ID筛选（可选） |
-| selected_by | int | 按选择人筛选（可选） |
-| selected_method | string | 按选择方式筛选（可选） |
-| skip | int | 跳过记录数（默认 0） |
-| limit | int | 返回记录数（默认 50，最大 500） |
-
-**权限说明**:
-- 管理员可查看所有历史记录
-- 普通用户只能查看自己的历史记录
 
 **响应**:
 ```json
 [
   {
     "id": 1,
+    "user_id": 1,
     "dish_id": 1,
-    "selected_by": 1,
-    "selected_method": "random",
-    "comment": "今天想吃点辣",
+    "quantity": 2,
+    "dish_name": "宫保鸡丁",
+    "created_at": "2024-01-01T00:00:00",
+    "updated_at": "2024-01-01T00:00:00"
+  }
+]
+```
+
+---
+
+### 5.3 更新购物车数量
+
+```
+PUT /cart/{item_id}
+```
+
+**说明**: 更新购物车中菜品的数量（需登录）
+
+**请求头**: `Authorization: Bearer <token>`
+
+**路径参数**:
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| item_id | int | 购物车项ID |
+
+**请求体**:
+```json
+{
+  "quantity": 3
+}
+```
+
+**响应**:
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "dish_id": 1,
+  "quantity": 3,
+  "dish_name": "宫保鸡丁",
+  "created_at": "2024-01-01T00:00:00",
+  "updated_at": "2024-01-01T00:00:00"
+}
+```
+
+**错误响应**:
+```json
+// 404: 购物车项不存在
+{"detail": "购物车项不存在"}
+```
+
+---
+
+### 5.4 移除购物车项
+
+```
+DELETE /cart/{item_id}
+```
+
+**说明**: 从购物车移除指定菜品（需登录）
+
+**请求头**: `Authorization: Bearer <token>`
+
+**路径参数**:
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| item_id | int | 购物车项ID |
+
+**响应**: `204 No Content`
+
+
+**错误响应**:
+```json
+// 404: 购物车项不存在
+{"detail": "购物车项不存在"}
+```
+
+---
+
+### 5.5 清空购物车
+
+```
+DELETE /cart
+```
+
+**说明**: 清空当前用户的所有购物车内容（需登录）
+
+**请求头**: `Authorization: Bearer <token>`
+
+**响应**: `204 No Content`
+
+---
+
+## 6. 收藏 (Favorites)
+
+### 6.1 添加收藏
+
+```
+POST /favorites/{dish_id}
+```
+
+**说明**: 收藏指定菜品（需登录）
+
+**请求头**: `Authorization: Bearer <token>`
+
+**路径参数**:
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| dish_id | int | 菜品ID |
+
+**响应** (201 Created):
+```json
+{
+  "message": "收藏成功",
+  "dish_id": 1
+}
+```
+
+**说明**: 如果已收藏，返回 `{"message": "已收藏", "dish_id": 1}`
+
+
+**错误响应**:
+```json
+// 404: 菜品不存在
+{"detail": "菜品不存在"}
+```
+
+---
+
+### 6.2 获取收藏列表
+
+```
+GET /favorites
+```
+
+**说明**: 获取当前用户的收藏列表（需登录）
+
+**请求头**: `Authorization: Bearer <token>`
+
+**响应**:
+```json
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "dish_id": 1,
+    "dish_name": "宫保鸡丁",
+    "category_name": "川菜",
     "created_at": "2024-01-01T00:00:00"
   }
 ]
@@ -743,110 +891,72 @@ GET /history
 
 ---
 
-### 5.3 获取单条历史记录
+### 6.3 检查收藏状态
 
 ```
-GET /history/{history_id}
+GET /favorites/{dish_id}
 ```
 
-**说明**: 获取指定历史记录（需登录）
+**说明**: 检查指定菜品是否已收藏（需登录）
+
 
 **请求头**: `Authorization: Bearer <token>`
 
 **路径参数**:
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| history_id | int | 历史记录ID |
+| dish_id | int | 菜品ID |
 
-**权限说明**:
-- 管理员可查看任意记录
-- 普通用户只能查看自己的记录
-
-**响应**: 同 5.2
+**响应**:
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "dish_id": 1,
+  "dish_name": "宫保鸡丁",
+  "category_name": "川菜",
+  "created_at": "2024-01-01T00:00:00"
+}
+```
 
 **错误响应**:
 ```json
-// 403: 权限不足
-{"detail": "权限不足"}
-
-// 404: 历史记录不存在
-{"detail": "历史记录不存在"}
+// 404: 未收藏
+{"detail": "未收藏"}
 ```
 
 ---
 
-### 5.4 删除历史记录
+
+### 6.4 取消收藏
 
 ```
-DELETE /history/{history_id}
+DELETE /favorites/{dish_id}
 ```
 
-**说明**: 删除指定历史记录（需登录）
+**说明**: 取消指定菜品的收藏（需登录）
+
 
 **请求头**: `Authorization: Bearer <token>`
 
 **路径参数**:
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| history_id | int | 历史记录ID |
+| dish_id | int | 菜品ID |
 
-**权限说明**:
-- 管理员可删除任意记录
-- 普通用户只能删除自己的记录
-
-**响应**:
-```json
-{
-  "message": "历史记录删除成功"
-}
-```
+**响应**: `204 No Content`
 
 **错误响应**:
 ```json
-// 403: 只能删除自己的历史记录
-{"detail": "只能删除自己的历史记录"}
-
-// 404: 历史记录不存在
-{"detail": "历史记录不存在"}
+// 404: 收藏不存在
+{"detail": "收藏不存在"}
 ```
 
 ---
 
-### 5.5 批量删除历史记录
+## 7. 智能推荐 (Recommend)
 
-```
-DELETE /history
-```
-
-**说明**: 批量删除历史记录（仅管理员）
-
-**请求头**: `Authorization: Bearer <token>`
-
-**查询参数**:
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| dish_id | int | 按菜品ID筛选删除（可选） |
-| selected_by | int | 按选择人筛选删除（可选） |
-| days | int | 删除 N 天前的记录（可选） |
-
-**响应**:
-```json
-{
-  "message": "成功删除 10 条历史记录"
-}
-```
-
-**示例**:
-```
-DELETE /history?days=30     # 删除30天前的所有记录
-DELETE /history?dish_id=1  # 删除菜品ID为1的所有记录
-```
-
----
-
-## 6. 智能推荐 (Recommend)
-
-### 6.1 随机推荐
+### 7.1 随机推荐
 
 ```
 GET /recommend/random
@@ -858,7 +968,6 @@ GET /recommend/random
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | category_id | int | 指定分类ID（可选） |
-| exclude_days | int | 排除最近 N 天内选择过的菜品（可选） |
 
 **响应**:
 ```json
@@ -879,8 +988,6 @@ GET /recommend/random
 ```
 GET /recommend/random                                    # 随机推荐任意菜品
 GET /recommend/random?category_id=1                     # 在川菜分类中随机推荐
-GET /recommend/random?exclude_days=7                     # 排除最近7天选过的菜品
-GET /recommend/random?category_id=2&exclude_days=14      # 组合使用
 ```
 
 ---

@@ -7,7 +7,7 @@ class Dish(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     category_id = Column(Integer, ForeignKey("category.id"), nullable=False)
-    name = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False, unique=True)
     difficulty = Column(Integer, default=1)
     favorite = Column(Boolean, default=False)
     enabled = Column(Boolean, default=True)
