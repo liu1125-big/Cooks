@@ -10,7 +10,7 @@ from app.models.dish import Dish
 from app.schemas.history import HistoryCreate, HistoryResponse
 from app.services.auth import get_current_user, require_admin
 
-router = APIRouter(prefix="/api/history", tags=["history"])
+router = APIRouter(prefix="/history", tags=["history"])
 
 
 @router.post("", response_model=HistoryResponse, status_code=201)

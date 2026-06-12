@@ -13,7 +13,7 @@ from app.services.auth import (
     get_password_hash
 )
 
-router = APIRouter(prefix="/api/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=201)

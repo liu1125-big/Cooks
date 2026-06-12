@@ -9,7 +9,7 @@ from app.models.dish import Dish
 from app.schemas.category import CategoryCreate, CategoryUpdate, CategoryResponse
 from app.services.auth import require_admin
 
-router = APIRouter(prefix="/api/categories", tags=["categories"])
+router = APIRouter(prefix="/categories", tags=["categories"])
 
 
 @router.post("", response_model=CategoryResponse, status_code=201)

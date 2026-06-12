@@ -10,7 +10,7 @@ from app.models.history import History
 from app.schemas.dish import DishCreate, DishUpdate, DishResponse
 from app.services.auth import get_current_user, require_admin
 
-router = APIRouter(prefix="/api/dishes", tags=["dishes"])
+router = APIRouter(prefix="/dishes", tags=["dishes"])
 
 
 @router.post("", response_model=DishResponse, status_code=201)
