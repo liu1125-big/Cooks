@@ -29,7 +29,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
         db_user = User(
             username=user.username,
-            password_hash=get_password_hash(user.password),
+            password=get_password_hash(user.password),
             nickname=user.nickname,
             role=user.role
         )
