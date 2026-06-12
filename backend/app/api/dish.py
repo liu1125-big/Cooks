@@ -5,9 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from app.database.session import get_db
 from app.models.user import User
 from app.models.dish import Dish
-from app.models.category import Category
 from app.schemas.dish import DishCreate, DishUpdate, DishResponse
-from app.services.auth import get_current_user, require_admin
+from app.services.auth import require_admin
 
 router = APIRouter(prefix="/dishes", tags=["dishes"])
 
@@ -19,19 +18,12 @@ def create_dish(
     db: Session = Depends(get_db)
 ):
     """创建菜品（仅管理员）"""
-    if dish.category_id:
-        category = db.query(Category).filter(Category.id == dish.category_id).first()
-        if not category:
-            raise HTTPException(status_code=400, detail="指定的分类不存在")
-    
     existing = db.query(Dish).filter(Dish.name == dish.name).first()
     if existing:
         raise HTTPException(status_code=400, detail="菜品名称已存在")
     
     try:
-        dish_data = dish.model_dump(exclude={"created_by"})
-        dish_data["created_by"] = current_user.id
-        db_dish = Dish(**dish_data)
+        db_dish = Dish(**dish.model_dump())
         db.add(db_dish)
         db.commit()
         db.refresh(db_dish)
@@ -50,10 +42,7 @@ def create_dish(
 @router.get("", response_model=list[DishResponse])
 def get_dishes(
     keyword: str | None = None,
-    category_id: int | None = None,
-    favorite: bool | None = None,
-    difficulty: int | None = None,
-    enabled: bool | None = None,
+    category: str | None = None,
     skip: int = Query(0, ge=0, description="跳过记录数"),
     limit: int = Query(100, ge=1, le=1000, description="返回记录数"),
     db: Session = Depends(get_db)
@@ -64,14 +53,8 @@ def get_dishes(
         
         if keyword:
             query = query.filter(Dish.name.contains(keyword))
-        if category_id is not None:
-            query = query.filter(Dish.category_id == category_id)
-        if favorite is not None:
-            query = query.filter(Dish.favorite == favorite)
-        if difficulty is not None:
-            query = query.filter(Dish.difficulty == difficulty)
-        if enabled is not None:
-            query = query.filter(Dish.enabled == enabled)
+        if category is not None:
+            query = query.filter(Dish.category == category)
         
         return query.order_by(Dish.id).offset(skip).limit(limit).all()
     except Exception as e:
@@ -99,11 +82,6 @@ def update_dish(
     if not db_dish:
         raise HTTPException(status_code=404, detail="菜品不存在")
     
-    if dish.category_id is not None:
-        category = db.query(Category).filter(Category.id == dish.category_id).first()
-        if not category:
-            raise HTTPException(status_code=400, detail="指定的分类不存在")
-    
     if dish.name is not None and dish.name != db_dish.name:
         existing = db.query(Dish).filter(
             Dish.name == dish.name, 
@@ -124,7 +102,7 @@ def update_dish(
         error_msg = str(e.orig) if e.orig else str(e)
         if "duplicate" in error_msg.lower() or "unique" in error_msg.lower():
             raise HTTPException(status_code=400, detail="菜品名称已存在")
-        raise HTTPException(status_code=400, detail=f"更新菜品失败: {error_msg}")
+        raise HTTPException(status_code=500, detail=f"更新菜品失败: {error_msg}")
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"更新菜品失败: {str(e)}")
@@ -151,24 +129,3 @@ def delete_dish(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"删除菜品失败: {str(e)}")
-
-
-@router.post("/{dish_id}/favorite")
-def toggle_favorite(
-    dish_id: int, 
-    current_user: Annotated[User, Depends(get_current_user)],
-    db: Session = Depends(get_db)
-):
-    """切换菜品收藏状态（登录用户）"""
-    db_dish = db.query(Dish).filter(Dish.id == dish_id).first()
-    if not db_dish:
-        raise HTTPException(status_code=404, detail="菜品不存在")
-    
-    try:
-        db_dish.favorite = not db_dish.favorite
-        db.commit()
-        db.refresh(db_dish)
-        return {"message": "收藏状态已更新", "favorite": db_dish.favorite}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"更新收藏状态失败: {str(e)}")

@@ -60,6 +60,14 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@router.get("/me", response_model=UserResponse)
+def get_current_user_info(
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    """获取当前登录用户信息"""
+    return current_user
+
+
 @router.get("", response_model=list[UserResponse])
 def get_users(
     current_user: Annotated[User, Depends(require_admin)],
@@ -115,7 +123,7 @@ def update_user(
         for key, value in user.model_dump(exclude_unset=True).items():
             if value is not None:
                 if key == "password":
-                    setattr(db_user, "password_hash", get_password_hash(value))
+                    setattr(db_user, "password", get_password_hash(value))
                 else:
                     setattr(db_user, key, value)
         db.commit()

@@ -7,11 +7,11 @@ class RecommendationService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_random_dish(self, category_id: int | None = None):
-        query = self.db.query(Dish).filter(Dish.enabled == True)
+    def get_random_dish(self, category: str | None = None):
+        query = self.db.query(Dish)
 
-        if category_id is not None:
-            query = query.filter(Dish.category_id == category_id)
+        if category is not None:
+            query = query.filter(Dish.category == category)
 
         # Get all matching dishes and pick a random one
         all_dishes = query.all()

@@ -2,10 +2,7 @@ from sqlalchemy.orm import Session
 from app.database.base import Base
 from app.database.session import engine, SessionLocal
 from app.models.user import User
-from app.models.category import Category
 from app.models.dish import Dish
-from app.models.cart import Cart
-from app.models.favorite import Favorite
 from app.services.auth import get_password_hash
 
 
@@ -17,22 +14,23 @@ def init_db():
         if db.query(User).count() > 0:
             return
 
+        # 创建用户（根据需求文档字段）
         users = [
             User(
                 username="admin", 
-                password_hash=get_password_hash("admin123"), 
+                password=get_password_hash("admin123"), 
                 nickname="管理员", 
                 role="admin"
             ),
             User(
                 username="user1", 
-                password_hash=get_password_hash("user123"), 
+                password=get_password_hash("user123"), 
                 nickname="用户一", 
                 role="user"
             ),
             User(
                 username="user2", 
-                password_hash=get_password_hash("user123"), 
+                password=get_password_hash("user123"), 
                 nickname="用户二", 
                 role="user"
             ),
@@ -40,32 +38,35 @@ def init_db():
         db.add_all(users)
         db.commit()
 
-        categories = [
-            Category(name="家常菜", sort=1, enabled=True),
-            Category(name="快手菜", sort=2, enabled=True),
-            Category(name="硬菜", sort=3, enabled=True),
-            Category(name="汤类", sort=4, enabled=True),
-            Category(name="甜点", sort=5, enabled=True),
-        ]
-        db.add_all(categories)
-        db.commit()
+        # # 创建分类（根据需求文档字段）
+        # categories = [
+        #     Category(name="家常菜", sort=1, enabled=True),
+        #     Category(name="快手菜", sort=2, enabled=True),
+        #     Category(name="硬菜", sort=3, enabled=True),
+        #     Category(name="汤类", sort=4, enabled=True),
+        #     Category(name="甜点", sort=5, enabled=True),
+        # ]
+        # db.add_all(categories)
+        # db.commit()
 
+        # 创建菜品（根据需求文档字段：id, category, name, remark）
+        # category 使用分类名称字符串，而不是 category_id
         dishes = [
-            Dish(category_id=1, name="番茄炒蛋", difficulty=1, enabled=True, remark="经典家常菜", created_by=1),
-            Dish(category_id=1, name="酸辣土豆丝", difficulty=1, enabled=True, remark="下饭神器", created_by=1),
-            Dish(category_id=1, name="红烧肉", difficulty=2, enabled=True, remark="肥而不腻", created_by=1),
-            Dish(category_id=2, name="蒜蓉西兰花", difficulty=1, enabled=True, remark="营养健康", created_by=1),
-            Dish(category_id=2, name="蛋炒饭", difficulty=1, enabled=True, remark="剩饭秒变美食", created_by=1),
-            Dish(category_id=3, name="糖醋里脊", difficulty=3, enabled=True, remark="外酥里嫩", created_by=1),
-            Dish(category_id=3, name="水煮鱼", difficulty=3, enabled=True, remark="麻辣鲜香", created_by=1),
-            Dish(category_id=4, name="番茄蛋汤", difficulty=1, enabled=True, remark="简单美味", created_by=1),
-            Dish(category_id=4, name="排骨玉米汤", difficulty=2, enabled=True, remark="滋补养生", created_by=1),
-            Dish(category_id=5, name="蛋糕", difficulty=3, enabled=True, remark="甜品之王", created_by=1),
-            Dish(category_id=5, name="布丁", difficulty=2, enabled=True, remark="入口即化", created_by=1),
-            Dish(category_id=1, name="宫保鸡丁", difficulty=2, enabled=True, remark="川菜经典", created_by=2),
-            Dish(category_id=2, name="凉拌黄瓜", difficulty=1, enabled=True, remark="清爽开胃", created_by=2),
-            Dish(category_id=3, name="东坡肘子", difficulty=3, enabled=True, remark="皮糯肉烂", created_by=2),
-            Dish(category_id=5, name="冰激凌", difficulty=2, enabled=True, remark="消暑圣品", created_by=2),
+            Dish(category="家常菜", name="番茄炒蛋", remark="经典家常菜"),
+            Dish(category="家常菜", name="酸辣土豆丝", remark="下饭神器"),
+            Dish(category="家常菜", name="红烧肉", remark="肥而不腻"),
+            Dish(category="快手菜", name="蒜蓉西兰花", remark="营养健康"),
+            Dish(category="快手菜", name="蛋炒饭", remark="剩饭秒变美食"),
+            Dish(category="硬菜", name="糖醋里脊", remark="外酥里嫩"),
+            Dish(category="硬菜", name="水煮鱼", remark="麻辣鲜香"),
+            Dish(category="汤类", name="番茄蛋汤", remark="简单美味"),
+            Dish(category="汤类", name="排骨玉米汤", remark="滋补养生"),
+            Dish(category="甜点", name="蛋糕", remark="甜品之王"),
+            Dish(category="甜点", name="布丁", remark="入口即化"),
+            Dish(category="家常菜", name="宫保鸡丁", remark="川菜经典"),
+            Dish(category="快手菜", name="凉拌黄瓜", remark="清爽开胃"),
+            Dish(category="硬菜", name="东坡肘子", remark="皮糯肉烂"),
+            Dish(category="甜点", name="冰激凌", remark="消暑圣品"),
         ]
         db.add_all(dishes)
         db.commit()

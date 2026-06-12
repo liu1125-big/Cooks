@@ -1,8 +1,6 @@
-from datetime import datetime
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.user import User
@@ -15,21 +13,13 @@ router = APIRouter(prefix="/cart", tags=["cart"])
 
 class CartItemCreate(BaseModel):
     dish_id: int
-    quantity: int = 1
-
-
-class CartItemUpdate(BaseModel):
-    quantity: int
 
 
 class CartItemResponse(BaseModel):
     id: int
     user_id: int
     dish_id: int
-    quantity: int
     dish_name: str | None = None
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
 
     class Config:
         from_attributes = True
@@ -54,15 +44,11 @@ def add_to_cart(
     ).first()
 
     if existing:
-        # 更新数量
-        existing.quantity += item.quantity
-        db.commit()
-        db.refresh(existing)
-        existing.dish_name = dish.name
-        return existing
+        # 该菜品已在购物车中，请勿重复添加
+        raise HTTPException(status_code=400, detail="该菜品已在购物车中，请勿重复添加")
 
     # 新增购物车项
-    cart_item = Cart(user_id=current_user.id, dish_id=item.dish_id, quantity=item.quantity)
+    cart_item = Cart(user_id=current_user.id, dish_id=item.dish_id)
     db.add(cart_item)
     db.commit()
     db.refresh(cart_item)
@@ -85,31 +71,6 @@ def get_cart(
         item.dish_name = dish_name
         result.append(item)
     return result
-
-
-@router.put("/{item_id}", response_model=CartItemResponse)
-def update_cart_item(
-    item_id: int,
-    item: CartItemUpdate,
-    current_user: Annotated[User, Depends(get_current_user)],
-    db: Session = Depends(get_db)
-):
-    """更新购物车中的菜品数量"""
-    cart_item = db.query(Cart).filter(
-        Cart.id == item_id,
-        Cart.user_id == current_user.id
-    ).first()
-
-    if not cart_item:
-        raise HTTPException(status_code=404, detail="购物车项不存在")
-
-    cart_item.quantity = item.quantity
-    db.commit()
-    db.refresh(cart_item)
-
-    dish = db.query(Dish).filter(Dish.id == cart_item.dish_id).first()
-    cart_item.dish_name = dish.name if dish else None
-    return cart_item
 
 
 @router.delete("/{item_id}", status_code=204)

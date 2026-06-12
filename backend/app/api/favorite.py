@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -18,8 +17,7 @@ class FavoriteResponse(BaseModel):
     user_id: int
     dish_id: int
     dish_name: str | None = None
-    category_name: str | None = None
-    created_at: datetime | None = None
+    category: str | None = None
 
     class Config:
         from_attributes = True
