@@ -1,0 +1,10 @@
+^D:\ZPT\COOKS\FRONTEND\BUILD\CMAKEFILES\607C6DCC578F0E80E79302FD3CA7D8FD\GENERATE.STAMP.RULE
+setlocal
+D:\Apps\cmake\bin\cmake.exe -SD:/zpt/cooks/frontend -BD:/zpt/cooks/frontend/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/zpt/cooks/frontend/build/Cooks.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

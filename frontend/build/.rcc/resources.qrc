@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="qml/Main.qml">D:/zpt/cooks/frontend/qml/Main.qml</file>
+    <file alias="qml/LoginPage.qml">D:/zpt/cooks/frontend/qml/LoginPage.qml</file>
+    <file alias="qml/HomePage.qml">D:/zpt/cooks/frontend/qml/HomePage.qml</file>
+    <file alias="qml/DishesPage.qml">D:/zpt/cooks/frontend/qml/DishesPage.qml</file>
+    <file alias="qml/CategoriesPage.qml">D:/zpt/cooks/frontend/qml/CategoriesPage.qml</file>
+    <file alias="qml/HistoryPage.qml">D:/zpt/cooks/frontend/qml/HistoryPage.qml</file>
+    <file alias="qml/AddDishPopup.qml">D:/zpt/cooks/frontend/qml/AddDishPopup.qml</file>
+    <file alias="qml/AddCategoryPopup.qml">D:/zpt/cooks/frontend/qml/AddCategoryPopup.qml</file>
+    <file alias="qml/ApiService.qml">D:/zpt/cooks/frontend/qml/ApiService.qml</file>
+    <file alias="qml/ModalBlur.qml">D:/zpt/cooks/frontend/qml/ModalBlur.qml</file>
+  </qresource>
+</RCC>
+
