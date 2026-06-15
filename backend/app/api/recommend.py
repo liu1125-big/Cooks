@@ -4,7 +4,7 @@ from app.database.session import get_db
 from app.services.recommendation_service import RecommendationService
 from app.schemas.recommend import RecommendDishResponse
 
-router = APIRouter(prefix="/recommend", tags=["recommend"])
+router = APIRouter(prefix="", tags=["recommend"])
 
 
 @router.get("/random", response_model=RecommendDishResponse)
