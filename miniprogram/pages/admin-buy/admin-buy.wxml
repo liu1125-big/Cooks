@@ -1,0 +1,107 @@
+<view class="admin-page">
+  <!-- 统计卡片 -->
+  <view wx:if="{{stats}}" class="stats-area">
+    <view class="stat-card stat-daily">
+      <view class="stat-header">
+        <text class="stat-icon">📊</text>
+        <text class="stat-title">今日采购</text>
+      </view>
+      <view class="stat-body">
+        <view class="stat-item">
+          <text class="stat-value">¥{{stats.daily.total_amount}}</text>
+          <text class="stat-label">总金额</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{stats.daily.total_count}}</text>
+          <text class="stat-label">次数</text>
+        </view>
+      </view>
+    </view>
+    <view class="stat-card stat-monthly">
+      <view class="stat-header">
+        <text class="stat-icon">📈</text>
+        <text class="stat-title">本月采购</text>
+      </view>
+      <view class="stat-body">
+        <view class="stat-item">
+          <text class="stat-value">¥{{stats.monthly.total_amount}}</text>
+          <text class="stat-label">总金额</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{stats.monthly.total_count}}</text>
+          <text class="stat-label">次数</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作栏 -->
+  <view class="section-bar">
+    <text class="section-bar-title">采购记录</text>
+    <view class="add-btn" bindtap="openAdd">+ 新增</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{buyList.length > 0}}">
+    <view class="buy-list fade-in">
+      <view class="buy-item" wx:for="{{buyList}}" wx:key="id">
+        <view class="buy-main">
+          <view class="buy-top-row">
+            <text class="buy-name">{{item.name}}</text>
+            <text class="buy-date">{{item.date}}</text>
+          </view>
+          <view class="buy-meta-row">
+            <text class="buy-calc">¥{{item.price}} × {{item.number}}</text>
+            <text class="buy-total">¥{{item.price * item.number}}</text>
+          </view>
+          <view wx:if="{{item.user_name}}" class="buy-user">操作人: {{item.user_name}}</view>
+        </view>
+        <view class="buy-actions">
+          <view class="act-edit" data-item="{{item}}" bindtap="openEdit">编辑</view>
+          <view class="act-delete" data-item="{{item}}" bindtap="deleteItem">删除</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <empty-state wx:else text="暂无采购记录" icon="🛒" subText="点击上方按钮添加记录" />
+
+  <!-- 弹窗 -->
+  <view class="popup-mask" wx:if="{{showPopup}}" bindtap="closePopup" catch:touchmove="noop">
+    <scroll-view class="popup-content" style="height: 70vh;" scroll-y catch:tap="noop">
+      <view class="popup-title">{{editMode ? '编辑采购' : '新增采购'}}</view>
+
+      <view class="field-group">
+        <text class="field-label">食材名称</text>
+        <input class="field-input" adjust-position="{{false}}" cursor-spacing="20" placeholder="如：猪肉、青菜" value="{{form.name}}" data-field="name" bindinput="onInputField" />
+      </view>
+      <view class="field-row">
+        <view class="field-group field-half">
+          <text class="field-label">单价（元）</text>
+          <input class="field-input" adjust-position="{{false}}" cursor-spacing="20" type="digit" placeholder="0.00" value="{{form.price}}" data-field="price" bindinput="onInputField" />
+        </view>
+        <view class="field-group field-half">
+          <text class="field-label">数量</text>
+          <input class="field-input" adjust-position="{{false}}" cursor-spacing="20" type="digit" placeholder="0" value="{{form.number}}" data-field="number" bindinput="onInputField" confirm-type="done" />
+        </view>
+      </view>
+      <view class="field-group">
+        <text class="field-label">采购日期</text>
+        <picker mode="date" value="{{form.date}}" bindchange="onDateChange">
+          <view class="picker-display">{{form.date || '请选择日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="popup-actions">
+        <button class="btn-outline" bindtap="closePopup">取消</button>
+        <button class="btn-primary" bindtap="handleSubmit">确定</button>
+      </view>
+    </scroll-view>
+  </view>
+</view>

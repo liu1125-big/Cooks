@@ -1,0 +1,50 @@
+<view class="detail-page" wx:if="{{dish}}">
+  <!-- 菜品大图 -->
+  <view class="hero-image">
+    <image wx:if="{{dish.image_url}}" class="dish-img" src="{{dish.image_url}}" mode="aspectFill" />
+    <view wx:else class="img-placeholder">
+      <text class="placeholder-icon">🍽️</text>
+    </view>
+    <view class="image-overlay"></view>
+  </view>
+
+  <!-- 信息卡片 -->
+  <view class="content-area">
+    <view class="info-card slide-up">
+      <view class="dish-title">{{dish.name}}</view>
+      <view class="dish-tags">
+        <text class="cat-tag">{{dish.category || '未分类'}}</text>
+      </view>
+      <view wx:if="{{dish.remark}}" class="remark-section">
+        <view class="remark-header">
+          <view class="remark-dot"></view>
+          <text>备注说明</text>
+        </view>
+        <text class="remark-text">{{dish.remark}}</text>
+      </view>
+    </view>
+
+    <!-- 操作卡片 -->
+    <view class="action-card slide-up">
+      <view class="fav-btn-row" bindtap="toggleFavorite">
+        <text class="fav-emoji">{{isFavorited ? '❤️' : '🤍'}}</text>
+        <text class="fav-label">{{isFavorited ? '已收藏' : '添加收藏'}}</text>
+      </view>
+      <view class="divider"></view>
+      <button class="cart-btn" bindtap="addToCart">
+        <text class="btn-icon">🛒</text>
+        <text>加入购物车</text>
+      </button>
+    </view>
+  </view>
+</view>
+
+<view wx:elif="{{loading}}" class="loading-page">
+  <view class="loading-spinner"></view>
+  <text class="loading-label">加载中...</text>
+</view>
+
+<view wx:else class="error-page">
+  <text class="error-icon">😕</text>
+  <text class="error-text">菜品不存在</text>
+</view>

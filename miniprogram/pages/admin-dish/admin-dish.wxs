@@ -1,0 +1,9 @@
+var stars = ['', '★', '★★', '★★★', '★★★★', '★★★★★']
+
+function difficultyStars(level) {
+  return stars[level] || '★'
+}
+
+module.exports = {
+  difficultyStars: difficultyStars
+}

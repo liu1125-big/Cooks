@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "Cooks 点餐",
+  "usingComponents": {
+    "dish-card": "/components/dish-card/dish-card",
+    "cart-bar": "/components/cart-bar/cart-bar",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

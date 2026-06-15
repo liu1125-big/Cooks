@@ -1,0 +1,58 @@
+<view class="admin-page">
+  <!-- 顶部标题 -->
+  <view class="page-top-bar">
+    <text class="page-title">用户管理</text>
+    <text class="user-count">{{users.length}} 位用户</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{users.length > 0}}">
+    <view class="user-list fade-in">
+      <view class="user-item" wx:for="{{users}}" wx:key="id">
+        <view class="user-left">
+          <view class="user-avatar-wrap">
+            <text class="user-avatar-emoji">👤</text>
+          </view>
+          <view class="user-info">
+            <view class="user-name-row">
+              <text class="user-nickname">{{item.nickname}}</text>
+              <text class="tag role-tag {{item.role === 'admin' ? 'tag-orange' : 'tag-green'}}">{{item.role === 'admin' ? '管理员' : '用户'}}</text>
+            </view>
+            <view class="user-meta">@{{item.username}}</view>
+          </view>
+        </view>
+        <view class="user-actions">
+          <view class="act-edit" data-item="{{item}}" bindtap="openRolePicker">改角色</view>
+          <view wx:if="{{item.id !== currentUserId}}" class="act-delete" data-item="{{item}}" bindtap="deleteUser">删除</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <empty-state wx:else text="暂无用户" icon="👥" />
+
+  <!-- 角色选择弹窗 -->
+  <view class="popup-mask" wx:if="{{showRolePicker}}" bindtap="closeRolePicker" catch:touchmove="noop">
+    <view class="popup-content" catch:tap="noop">
+      <view class="popup-title">修改角色</view>
+      <view class="role-list">
+        <view class="role-option {{newRole === 'user' ? 'role-selected' : ''}}" bindtap="onRoleChange" data-value="user">
+          <text class="role-emoji">👤</text>
+          <text>普通用户</text>
+        </view>
+        <view class="role-option {{newRole === 'admin' ? 'role-selected' : ''}}" bindtap="onRoleChange" data-value="admin">
+          <text class="role-emoji">🛡️</text>
+          <text>管理员</text>
+        </view>
+      </view>
+      <view class="popup-actions">
+        <button class="btn-outline" bindtap="closeRolePicker">取消</button>
+        <button class="btn-primary" bindtap="saveRole">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

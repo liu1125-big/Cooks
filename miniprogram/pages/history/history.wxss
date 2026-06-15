@@ -1,0 +1,136 @@
+.history-page {
+  min-height: 100vh;
+  background: #F6F7F9;
+  padding-bottom: 40rpx;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+  color: #B2BEC3;
+  font-size: 26rpx;
+  gap: 16rpx;
+}
+
+/* 顶部栏 */
+.page-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+  background: #ffffff;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.03);
+}
+.top-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2D3436;
+}
+.clear-all-btn {
+  color: #E74C3C;
+  font-size: 26rpx;
+  font-weight: 500;
+  padding: 10rpx 24rpx;
+  background: rgba(231, 76, 60, 0.06);
+  border-radius: 100rpx;
+}
+.clear-all-btn:active {
+  background: rgba(231, 76, 60, 0.12);
+}
+
+/* 历史列表 */
+.history-list {
+  padding: 24rpx;
+}
+.date-group {
+  margin-bottom: 32rpx;
+}
+.date-label {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #636E72;
+  margin-bottom: 16rpx;
+  padding-left: 4rpx;
+}
+.date-dot {
+  width: 8rpx;
+  height: 8rpx;
+  background: #FF6B35;
+  border-radius: 50%;
+}
+.date-count {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: #B2BEC3;
+  margin-left: auto;
+}
+
+.date-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.history-card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.03);
+  transition: all 0.2s;
+}
+.history-card:active {
+  background: #FAFBFC;
+  transform: scale(0.99);
+}
+
+.h-card-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  flex: 1;
+}
+.h-card-icon {
+  width: 68rpx;
+  height: 68rpx;
+  background: linear-gradient(135deg, #FFF5EE, #FFE0CC);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 32rpx;
+}
+.h-card-info { flex: 1; }
+.h-card-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #2D3436;
+  margin-bottom: 6rpx;
+}
+.h-card-cat {
+  font-size: 22rpx;
+  color: #FF6B35;
+  font-weight: 500;
+}
+
+.h-card-right {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+.h-delete-btn {
+  color: #E74C3C;
+  font-size: 24rpx;
+  font-weight: 500;
+  padding: 10rpx 20rpx;
+}
+.h-delete-btn:active {
+  opacity: 0.6;
+}

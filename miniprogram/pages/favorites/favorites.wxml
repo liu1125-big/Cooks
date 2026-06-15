@@ -1,0 +1,32 @@
+<view class="fav-page">
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{favorites.length > 0}}">
+    <view class="fav-header">
+      <text class="header-count">{{favorites.length}} 道收藏</text>
+    </view>
+    <view class="fav-list fade-in">
+      <view class="fav-item" wx:for="{{favorites}}" wx:key="id" data-item="{{item}}" bindtap="goToDetail">
+        <view class="fav-left">
+          <view class="fav-icon-wrap">
+            <text>❤️</text>
+          </view>
+          <view class="fav-info">
+            <view class="fav-name">{{item.dish_name}}</view>
+            <view class="fav-meta">
+              <text class="fav-cat-tag">{{item.category || '未分类'}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="fav-right">
+          <view class="unfav-btn" catchtap="removeFavorite" data-item="{{item}}">取消</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <empty-state wx:else text="还没有收藏的菜品" icon="❤️" subText="浏览菜品时点击收藏吧" />
+</view>

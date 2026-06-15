@@ -1,0 +1,16 @@
+<view class="cart-bar" bindtap="onTap" wx:if="{{count > 0}}">
+  <view class="cart-left">
+    <view class="cart-icon-wrap">
+      <text class="cart-icon">🛒</text>
+      <view class="cart-badge">{{count}}</view>
+    </view>
+    <view class="cart-info">
+      <text class="cart-label">购物车</text>
+      <text class="cart-count">{{count}} 道菜</text>
+    </view>
+  </view>
+  <view class="cart-action">
+    <text>去查看</text>
+    <text class="arrow">›</text>
+  </view>
+</view>

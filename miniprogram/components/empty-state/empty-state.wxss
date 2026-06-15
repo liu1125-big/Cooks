@@ -1,0 +1,23 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 140rpx 40rpx;
+}
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 28rpx;
+  opacity: 0.8;
+}
+.empty-text {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #B2BEC3;
+  text-align: center;
+}
+.empty-sub {
+  font-size: 24rpx;
+  color: #DFE6E9;
+  margin-top: 12rpx;
+  text-align: center;
+}

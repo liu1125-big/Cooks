@@ -1,0 +1,47 @@
+<view class="cart-page">
+  <!-- 顶部标题栏 -->
+  <view class="page-header" wx:if="{{cartItems.length > 0}}">
+    <view class="header-title">我的购物车</view>
+    <view class="header-action" bindtap="clearCart">清空</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{cartItems.length > 0}}">
+    <view class="cart-list fade-in">
+      <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
+        <view class="item-left">
+          <view class="item-avatar">
+            <text>🍽️</text>
+          </view>
+          <view class="item-detail">
+            <view class="item-name">{{item.dish_name}}</view>
+            <view class="item-hint">已加入购物车</view>
+          </view>
+        </view>
+        <view class="item-right">
+          <view class="remove-btn" data-item="{{item}}" bindtap="onRemoveItem">
+            <text>移除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部下单栏 -->
+    <view class="bottom-bar safe-bottom">
+      <view class="order-info">
+        <text class="order-label">共</text>
+        <text class="order-count">{{totalCount}}</text>
+        <text class="order-label">道菜</text>
+      </view>
+      <view class="submit-order-btn" bindtap="submitOrder">
+        <text>提交订单</text>
+      </view>
+    </view>
+  </block>
+
+  <empty-state wx:else text="购物车是空的" icon="🛒" subText="去首页添加喜欢的菜品吧" />
+</view>

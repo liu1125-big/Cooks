@@ -1,0 +1,49 @@
+<view class="history-page">
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{dates.length > 0}}">
+    <view class="page-top-bar">
+      <text class="top-title">点餐历史</text>
+      <view class="clear-all-btn" bindtap="clearAll">清空全部</view>
+    </view>
+
+    <view class="history-list fade-in">
+      <block wx:for="{{dates}}" wx:for-item="date">
+        <view class="date-group">
+          <view class="date-label">
+            <view class="date-dot"></view>
+            <text>{{date}}</text>
+            <text class="date-count">{{groupedHistory[date].length}}道</text>
+          </view>
+          <view class="date-items">
+            <view
+              class="history-card"
+              wx:for="{{groupedHistory[date]}}"
+              wx:key="id"
+              data-item="{{item}}"
+              bindtap="goToDish"
+            >
+              <view class="h-card-left">
+                <view class="h-card-icon">
+                  <text>🍽️</text>
+                </view>
+                <view class="h-card-info">
+                  <view class="h-card-name">{{item.dish_name}}</view>
+                  <view wx:if="{{item.category}}" class="h-card-cat">{{item.category}}</view>
+                </view>
+              </view>
+              <view class="h-card-right">
+                <view class="h-delete-btn" catchtap="deleteItem" data-item="{{item}}">删除</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </block>
+
+  <empty-state wx:else text="暂无点餐历史" icon="📋" subText="提交订单后会在这里显示" />
+</view>

@@ -1,0 +1,21 @@
+<view class="dish-card card-hover" bindtap="onTap">
+  <view class="dish-thumb">
+    <image wx:if="{{dish.image_url}}" class="dish-image" src="{{dish.image_url}}" mode="aspectFill" />
+    <view wx:else class="dish-placeholder">
+      <text class="placeholder-emoji">🍽️</text>
+    </view>
+  </view>
+  <view class="dish-body">
+    <view class="dish-name ellipsis">{{dish.name}}</view>
+    <view class="dish-meta">
+      <text class="dish-category-tag">{{dish.category || '未分类'}}</text>
+    </view>
+    <view wx:if="{{dish.remark}}" class="dish-remark ellipsis-2">{{dish.remark}}</view>
+    <view wx:if="{{showActions}}" class="dish-footer">
+      <view class="add-cart-btn" catchtap="onAddCart">
+        <text class="cart-icon-sm">🛒</text>
+        <text>加入</text>
+      </view>
+    </view>
+  </view>
+</view>

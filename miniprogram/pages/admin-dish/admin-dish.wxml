@@ -1,0 +1,62 @@
+<view class="admin-page">
+  <!-- 顶部操作栏 -->
+  <view class="top-bar">
+    <view class="search-wrap">
+      <text class="s-icon">🔍</text>
+      <input class="s-input" placeholder="搜索菜品" placeholder-class="s-placeholder" value="{{keyword}}" bindconfirm="onSearch" />
+    </view>
+    <view class="add-btn" bindtap="openAdd">
+      <text>+ 新增</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:elif="{{dishes.length > 0}}">
+    <view class="dish-list fade-in">
+      <view class="dish-item" wx:for="{{dishes}}" wx:key="id">
+        <view class="dish-main">
+          <view class="dish-name-row">
+            <text class="dish-name">{{item.name}}</text>
+            <text class="cat-badge">{{item.category || '未分类'}}</text>
+          </view>
+          <view wx:if="{{item.remark}}" class="dish-remark ellipsis">{{item.remark}}</view>
+        </view>
+        <view class="dish-actions">
+          <view class="act-edit" data-item="{{item}}" bindtap="openEdit">编辑</view>
+          <view class="act-delete" data-item="{{item}}" bindtap="deleteItem">删除</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <empty-state wx:else text="暂无菜品" icon="🍽️" subText="点击上方按钮添加菜品" />
+
+  <!-- 弹窗 -->
+  <view class="popup-mask" wx:if="{{showPopup}}" bindtap="closePopup" catch:touchmove="noop">
+    <scroll-view class="popup-content" style="height: 70vh;" scroll-y catch:tap="noop">
+      <view class="popup-title">{{editMode ? '编辑菜品' : '新增菜品'}}</view>
+
+      <view class="field-group">
+        <text class="field-label">菜品名称</text>
+        <input class="field-input" adjust-position="{{false}}" cursor-spacing="20" placeholder="请输入菜品名称" value="{{form.name}}" data-field="name" bindinput="onInputField" />
+      </view>
+      <view class="field-group">
+        <text class="field-label">分类</text>
+        <input class="field-input" adjust-position="{{false}}" cursor-spacing="20" placeholder="如：家常菜、甜点、汤品" value="{{form.category}}" data-field="category" bindinput="onInputField" />
+      </view>
+      <view class="field-group">
+        <text class="field-label">备注</text>
+        <input class="field-input" adjust-position="{{false}}" cursor-spacing="20" placeholder="备注信息（可选）" value="{{form.remark}}" data-field="remark" bindinput="onInputField" confirm-type="done" />
+      </view>
+
+      <view class="popup-actions">
+        <button class="btn-outline" bindtap="closePopup">取消</button>
+        <button class="btn-primary" bindtap="handleSubmit">确定</button>
+      </view>
+    </scroll-view>
+  </view>
+</view>
