@@ -77,13 +77,14 @@ def get_favorites(
     db: Session = Depends(get_db)
 ):
     """获取当前用户的收藏列表"""
-    items = db.query(Favorite, Dish.name.label('dish_name')).join(
+    items = db.query(Favorite, Dish.name.label('dish_name'), Dish.category.label('dish_category')).join(
         Dish, Favorite.dish_id == Dish.id
     ).filter(Favorite.user_id == current_user.id).all()
 
     result = []
-    for item, dish_name in items:
+    for item, dish_name, dish_category in items:
         item.dish_name = dish_name
+        item.category = dish_category
         result.append(item)
     return result
 
@@ -105,4 +106,5 @@ def check_favorite(
 
     dish = db.query(Dish).filter(Dish.id == dish_id).first()
     favorite.dish_name = dish.name if dish else None
+    favorite.category = dish.category if dish else None
     return favorite

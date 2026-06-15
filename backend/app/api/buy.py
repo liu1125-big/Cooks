@@ -1,4 +1,4 @@
-from datetime import date, datetime
+import datetime
 from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -16,14 +16,14 @@ class BuyCreate(BaseModel):
     name: str
     price: float
     number: float
-    date: date
+    date: datetime.date
 
 
 class BuyUpdate(BaseModel):
     name: Optional[str] = None
     price: Optional[float] = None
     number: Optional[float] = None
-    date: Optional[date] = None
+    date: Optional[datetime.date] = None
 
 
 class BuyResponse(BaseModel):
@@ -31,11 +31,11 @@ class BuyResponse(BaseModel):
     name: str
     price: float
     number: float
-    date: date
+    date: datetime.date
     user_id: int
     user_name: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
 
     class Config:
         from_attributes = True
@@ -81,8 +81,8 @@ def get_buy_list(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Session = Depends(get_db),
     name: Optional[str] = None,
-    start_date: Optional[date] = None,
-    end_date: Optional[date] = None
+    start_date: Optional[datetime.date] = None,
+    end_date: Optional[datetime.date] = None
 ):
     """查询采购记录（仅管理员）"""
     is_admin(current_user)
@@ -186,13 +186,13 @@ def delete_buy(
 def get_daily_stats(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Session = Depends(get_db),
-    target_date: Optional[date] = None
+    target_date: Optional[datetime.date] = None
 ):
     """日统计（仅管理员）"""
     is_admin(current_user)
 
     if target_date is None:
-        target_date = date.today()
+        target_date = datetime.date.today()
 
     stats = db.query(
         func.count(Buy.id).label('total_count'),
@@ -216,17 +216,17 @@ def get_monthly_stats(
     """月统计（仅管理员）"""
     is_admin(current_user)
 
-    today = date.today()
+    today = datetime.date.today()
     if year is None:
         year = today.year
     if month is None:
         month = today.month
 
-    start_date = date(year, month, 1)
+    start_date = datetime.date(year, month, 1)
     if month == 12:
-        end_date = date(year + 1, 1, 1)
+        end_date = datetime.date(year + 1, 1, 1)
     else:
-        end_date = date(year, month + 1, 1)
+        end_date = datetime.date(year, month + 1, 1)
 
     stats = db.query(
         func.count(Buy.id).label('total_count'),
